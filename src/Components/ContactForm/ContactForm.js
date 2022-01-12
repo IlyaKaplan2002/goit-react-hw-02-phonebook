@@ -23,7 +23,17 @@ class ContactForm extends Component {
     this.setState({ [name]: value });
   };
 
-  handleReset = () => {
+  handleSubmit = e => {
+    e.preventDefault();
+
+    if (!this.state.name || !this.state.number) {
+      this.props.onSubmit({
+        name: e.target.elements.name.value,
+        number: e.target.elements.number.value,
+      });
+    } else this.props.onSubmit(this.state);
+
+    e.target.reset();
     this.setState({
       name: '',
       number: '',
@@ -31,15 +41,9 @@ class ContactForm extends Component {
   };
 
   render() {
-    const { onSubmit } = this.props;
     return (
       <ContactFormStyled>
-        <form
-          name="contact"
-          onReset={this.handleReset}
-          onChange={this.handleChange}
-          onSubmit={onSubmit}
-        >
+        <form name="contact" onChange={this.handleChange} onSubmit={this.handleSubmit}>
           <label htmlFor={this.nameId}>Name</label>
           <input
             id={this.nameId}

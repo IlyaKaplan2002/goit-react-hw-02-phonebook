@@ -11,24 +11,18 @@ class App extends Component {
     filter: '',
   };
 
-  onSubmitForm = e => {
-    e.preventDefault();
-
+  addContact = contact => {
     const id = uuid();
-    const name = e.target.elements.name.value;
-    const number = e.target.elements.number.value;
+    const { name } = contact;
 
     if (this.state.contacts.filter(contact => contact.name === name).length > 0) {
       alert(`${name} is already in contacts`);
-      e.target.reset();
       return;
     }
 
     this.setState(prevState => ({
-      contacts: [...prevState.contacts, { id, name, number }],
+      contacts: [...prevState.contacts, { id, ...contact }],
     }));
-
-    e.target.reset();
   };
 
   deleteItem = id => {
@@ -51,7 +45,7 @@ class App extends Component {
     return (
       <>
         <Section title="Phonebook">
-          <ContactForm onSubmit={this.onSubmitForm} />
+          <ContactForm onSubmit={this.addContact} />
         </Section>
         <Section title="Contacts">
           <Filter onChange={this.onFilterChange} />
