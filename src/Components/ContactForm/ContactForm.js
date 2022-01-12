@@ -17,8 +17,7 @@ class ContactForm extends Component {
   numberId = uuid();
 
   handleChange = e => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
 
     this.setState({ [name]: value });
   };
@@ -26,13 +25,7 @@ class ContactForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    if (!this.state.name || !this.state.number) {
-      this.props.onSubmit({
-        name: e.target.elements.name.value,
-        number: e.target.elements.number.value,
-      });
-    } else this.props.onSubmit(this.state);
-
+    this.props.onSubmit(this.state);
     e.target.reset();
     this.setState({
       name: '',
@@ -41,11 +34,15 @@ class ContactForm extends Component {
   };
 
   render() {
+    const { name, number } = this.state;
+
     return (
       <ContactFormStyled>
-        <form name="contact" onChange={this.handleChange} onSubmit={this.handleSubmit}>
+        <form name="contact" onSubmit={this.handleSubmit}>
           <label htmlFor={this.nameId}>Name</label>
           <input
+            value={name}
+            onChange={this.handleChange}
             id={this.nameId}
             type="text"
             name="name"
@@ -56,6 +53,8 @@ class ContactForm extends Component {
 
           <label htmlFor={this.numberId}>Number</label>
           <input
+            value={number}
+            onChange={this.handleChange}
             id={this.numberId}
             type="tel"
             name="number"
